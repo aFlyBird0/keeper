@@ -11,6 +11,7 @@ func InitRouter(r *gin.Engine) {
 	itemGroup := r.Group("/item")
 	{
 		itemGroup.GET("/listAll", service.ListItems)
+		itemGroup.POST("/add", service.AddItem)
 		itemGroup.GET("/error", service.JustShowError)
 	}
 }
