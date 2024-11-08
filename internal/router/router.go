@@ -8,4 +8,8 @@ import (
 
 func InitRouter(r *gin.Engine) {
 	r.GET("/health", service.Health)
+	itemGroup := r.Group("/item")
+	{
+		itemGroup.GET("/listAll", service.ListItems)
+	}
 }
