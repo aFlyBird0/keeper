@@ -1,6 +1,7 @@
 package service
 
 import (
+	"keeper/internal/db"
 	"keeper/internal/model"
 	"keeper/pkg/response"
 	"net/http"
@@ -10,12 +11,13 @@ import (
 )
 
 func ListItems(c *gin.Context) {
+	days7 := time.Now().Add(time.Hour * 24 * 7)
 	item := model.Item{
 		Name:        "苹果",
 		Amount:      3,
 		Quantifier:  "个",
 		Place:       "桌子上",
-		ExpiredAt:   time.Now().Add(time.Hour * 24 * 3),
+		ExpiredAt:   &days7,
 		Description: "大大大大苹果",
 	}
 	items := []model.Item{item}
@@ -36,6 +38,18 @@ func AddItem(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, response.Fail(response.ParamError))
 		return
 	}
+
+	// 填充默认值
+	item.FillDefaults()
+
+	// 存入数据库
+	// 思考：这里直接操作数据库合理吗
+	res := db.DB().Create(item)
+	if res.Error != nil {
+		c.JSON(http.StatusInternalServerError, response.Fail(response.DatabseError))
+		return
+	}
+	// 注：可以通过item.ID获取到数据库生成的ID
 	c.JSON(http.StatusOK, response.EmptySuccess())
 }
 

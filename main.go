@@ -1,12 +1,14 @@
 package main
 
 import (
+	"keeper/internal/db"
 	"keeper/internal/router"
 
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
+	db.InitDB()
 	r := gin.Default()
 	router.InitRouter(r)
 	err := r.Run()

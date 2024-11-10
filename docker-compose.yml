@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  mysql:
+    image: 'mysql:latest'
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+      - ./mysql/conf:/etc/mysql/conf.d
+      - ./mysql/log:/var/log/mysql
+      - ./mysql/init:/docker-entrypoint-initdb.d
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_DATABASE=keeper
+      - MYSQL_USER=bird
+      - MYSQL_PASSWORD=keeper123456
+      - MYSQL_RANDOM_ROOT_PASSWORD="yes"
+#  minio:
+#    image: 'minio/minio:latest'
+#    ports:
+#      - 9000:9000
+#      - 9090:9090
+#    environment:
+#      - MINIO_ACCESS_KEY=minioadmin
+#      - MINIO_SECRET_KEY=minioadmin
+#    command: server /data
