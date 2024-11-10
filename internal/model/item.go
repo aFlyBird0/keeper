@@ -8,13 +8,13 @@ import (
 
 type Item struct {
 	gorm.Model
-	Name string `gorm:"primary_key" binding:"required"`
+	Name string `gorm:"index" binding:"required"`
 	// 数量
 	Amount int `gorm:"not null,default:1"`
 	// 量词
 	Quantifier  string
-	Place       string `gorm:"not null,default:''"`
-	ExpiredAt   *time.Time
+	Place       string     `gorm:"not null,default:''"`
+	ExpiredAt   *time.Time `gorm:"index"`
 	Description string
 }
 
