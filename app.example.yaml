@@ -1,0 +1,14 @@
+db:
+  type: mysql # postgres, mysql, sqlite3
+  dsn: "bird:keeper123456@tcp(127.0.0.1:3306)/keeper?charset=utf8mb4&parseTime=True&loc=Local"
+  props:  # other parameters
+  # schema: # for postgres
+s3:
+  endpoint: http://127.0.0.1:9000
+  region: default
+  bucket: face # 存储桶名称
+  autoCreateBucket: true # 自动创建存储桶（如果不存在）
+  accessID: minioadmin
+  accessKey: minioadmin
+  pathstyle: true
+  fileReviewExpire: 60 # 文件预览链接过期时间（秒）
