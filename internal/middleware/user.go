@@ -12,7 +12,7 @@ func SimpleUser(c *gin.Context) {
 	// 从 Authorization Header 中提取信息
 	user := c.GetHeader("Authorization")
 	if user == "" {
-		c.JSON(http.StatusUnauthorized, response.Fail(response.NotLogin))
+		c.JSON(http.StatusUnauthorized, response.Fail(response.NotLoginError))
 		c.Abort()
 	}
 	c.Set(constant.UserContextKey, user)

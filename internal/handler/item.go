@@ -19,7 +19,7 @@ func ListItems(c *gin.Context) {
 	}
 	user := middleware.GetUser(c)
 	if user == "" {
-		c.JSON(http.StatusUnauthorized, response.Fail(response.NotLogin))
+		c.JSON(http.StatusUnauthorized, response.Fail(response.NotLoginError))
 		return
 	}
 	c.JSON(http.StatusOK, response.Success(items))
