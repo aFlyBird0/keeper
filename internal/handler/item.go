@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+	"keeper/internal/middleware"
 	"keeper/internal/model"
 	"keeper/internal/service"
 	"keeper/pkg/response"
@@ -13,7 +14,12 @@ import (
 func ListItems(c *gin.Context) {
 	items, err := service.NewItemService().ListItems(context.Background())
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, response.DatabseError)
+		c.JSON(http.StatusInternalServerError, response.Fail(response.DatabaseError))
+		return
+	}
+	user := middleware.GetUser(c)
+	if user == "" {
+		c.JSON(http.StatusUnauthorized, response.Fail(response.NotLogin))
 		return
 	}
 	c.JSON(http.StatusOK, response.Success(items))
@@ -22,7 +28,7 @@ func ListItems(c *gin.Context) {
 func ListExpiredItems(c *gin.Context) {
 	items, err := service.NewItemService().ListExpiredItems(context.Background())
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, response.DatabseError)
+		c.JSON(http.StatusInternalServerError, response.Fail(response.DatabaseError))
 		return
 	}
 	c.JSON(http.StatusOK, response.Success(items))
@@ -32,7 +38,7 @@ func ListItemsByName(c *gin.Context) {
 	name := c.Query("name")
 	items, err := service.NewItemService().FindItemsByName(context.Background(), name)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, response.DatabseError)
+		c.JSON(http.StatusInternalServerError, response.Fail(response.DatabaseError))
 		return
 	}
 	c.JSON(http.StatusOK, response.Success(items))
@@ -59,7 +65,7 @@ func AddItem(c *gin.Context) {
 	// 存入数据库
 	res, err := service.NewItemService().CreateItem(context.Background(), item)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, response.DatabseError)
+		c.JSON(http.StatusInternalServerError, response.Fail(response.DatabaseError))
 		return
 	}
 	// 注：可以通过item.ID获取到数据库生成的ID
