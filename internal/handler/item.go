@@ -9,11 +9,16 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	log "github.com/sirupsen/logrus"
 )
 
 func ListItems(c *gin.Context) {
 	items, err := service.NewItemService().ListItems(context.Background())
 	if err != nil {
+		log.WithFields(log.Fields{
+			"type":  "listItems",
+			"error": err.Error(),
+		}).Error("db error")
 		c.JSON(http.StatusInternalServerError, response.Fail(response.DatabaseError))
 		return
 	}
@@ -61,6 +66,11 @@ func AddItem(c *gin.Context) {
 
 	// 填充默认值
 	item.FillDefaults()
+
+	log.WithFields(log.Fields{
+		"type": "addItem",
+		"item": item,
+	}).Info("start to add item")
 
 	// 存入数据库
 	res, err := service.NewItemService().CreateItem(context.Background(), item)
